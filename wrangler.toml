@@ -1,0 +1,7 @@
+name = "slash-test"
+type = "webpack"
+account_id = "8007138c75c5bd58b814e076d44c0a82"
+workers_dev = true
+# route = "api.tilting.me"
+# zone_id = "e2692bcc98702ed94af27ae73368a1d5"
+webpack_config = "webpack.config.js"
