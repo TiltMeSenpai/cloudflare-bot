@@ -5,7 +5,10 @@ const execFile = util.promisify(require("child_process").execFile);
 const fetch = require('node-fetch');
 
 (async () => {
-    const {stdout} = await execFile("node_modules/.bin/jsdoc", ["-X", "commands.js"])
+    let jsdoc_path = "node_modules/.bin/jsdoc"
+    if(process.platform == "win32")
+        jsdoc_path = "node_modules/.bin/jsdoc.bat"
+    const {stdout} = await execFile(jsdoc_path, ["-X", "commands.js"])
     const jsdoc = JSON.parse(stdout)
     let commands = []
     let choices = new Map()
