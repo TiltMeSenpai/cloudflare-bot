@@ -1,15 +1,9 @@
-# 👷 `worker-template` Hello World
+# Cloudflare Discord Bot
 
-A template for kick starting a Cloudflare worker project.
+To use:
 
-[`index.js`](https://github.com/cloudflare/worker-template/blob/master/index.js) is the content of the Workers script.
-
-#### Wrangler
-
-To generate using [wrangler](https://github.com/cloudflare/wrangler)
-
-```
-wrangler generate projectname https://github.com/cloudflare/worker-template
-```
-
-Further documentation for Wrangler can be found [here](https://developers.cloudflare.com/workers/tooling/wrangler).
+- Commands go in commands.js
+- Commands must take a single object
+- Command documentation is pulled from JSDoc strings
+- Valid recognized types are: string, number, bool, User, Channel, Role, and String mapped Enum's (also defined in commands.js)
+- Subcommand/Subcommand groups and guild-specific commands TBD

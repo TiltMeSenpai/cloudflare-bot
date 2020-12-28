@@ -8,28 +8,17 @@ function ping({pong}){
 }
 
 /**
- * @enum {string}
+ * Repeat a phrase some number of times
+ * @param {Object} arg
+ * @param {string} arg.phrase - Phrase to repeat
+ * @param {number} arg.number - How many times to repeat the phrase
  */
-var rgb = {
-    RED: "Red",
-    GREEN: "Green",
-    BLUE: "Blue"
+function repeat({phrase, number}){
+    return phrase.repeat(number)
 }
 
-/**
- * Return a color
- * @param {Object} arg
- * @param {rgb} arg.rgb - A choice of red, blue or green
- * @param {boolean} [arg.is_color] - Is it a color?
- */
-function color({rgb, is_color=false}){
-    if(is_color)
-        return `${rgb} is a color`
-    else
-        return `${rgb} is not a color`
-}
 
 module.exports = {
     ping,
-    color
+    repeat
 }

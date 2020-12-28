@@ -31,8 +31,7 @@ const fetch = require('node-fetch');
                         return 0
                     case "string":
                         return 3
-                    case "int":
-                    case "integer":
+                    case "number":
                         return 4
                     case "bool":
                     case "boolean":
