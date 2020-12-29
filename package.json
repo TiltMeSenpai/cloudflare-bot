@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "cloudflare-deploy": "wrangler publish",
+    "discord-list": "node ./util/command_manager.js list",
     "discord-push": "node ./util/command_manager.js push",
     "discord-clean": "node ./util/command_manager.js clean",
     "discord-deploy": "npm run discord-clean && npm run discord-push"
