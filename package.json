@@ -5,10 +5,10 @@
   "description": "A template for kick starting a Cloudflare Workers project",
   "main": "index.js",
   "scripts": {
-    "cloudflare-push": "wrangler publish",
+    "cloudflare-deploy": "wrangler publish",
     "discord-push": "node ./util/command_manager.js push",
     "discord-clean": "node ./util/command_manager.js clean",
-    "deploy": "npm run cloudflare-push && npm run discord-clean && npm run discord-push"
+    "discord-deploy": "npm run discord-clean && npm run discord-push"
   },
   "author": "Josh Koike <jk@tilting.me>",
   "license": "MIT",
