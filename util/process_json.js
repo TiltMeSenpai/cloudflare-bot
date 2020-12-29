@@ -7,7 +7,7 @@ const fetch = require('node-fetch');
 (async () => {
     let jsdoc_path = "./node_modules/.bin/jsdoc"
     if(process.platform == "win32")
-        jsdoc_path = "./node_modules/.bin/jsdoc.bat"
+        jsdoc_path = "node_modules\\.bin\\jsdoc.bat"
     const {stdout} = await execFile(jsdoc_path, ["-X", "commands.js"])
     const jsdoc = JSON.parse(stdout)
     let commands = []
