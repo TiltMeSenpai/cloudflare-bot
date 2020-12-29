@@ -6,8 +6,9 @@
   "main": "index.js",
   "scripts": {
     "cloudflare-push": "wrangler publish",
-    "discord-push": "node ./util/process_json",
-    "deploy": "npm run cloudflare-push && npm run discord-push"
+    "discord-push": "node ./util/command_manager.js push",
+    "discord-clean": "node ./util/command_manager.js clean",
+    "deploy": "npm run cloudflare-push && npm run discord-clean && npm run discord-push"
   },
   "author": "Josh Koike <jk@tilting.me>",
   "license": "MIT",
@@ -16,9 +17,8 @@
   },
   "dependencies": {
     "@wasm-tool/wasm-pack-plugin": "^1.3.1",
-    "ed25519.wasm": "^1.0.3",
+    "discord.js": "^12.5.1",
     "jsdoc": "^3.6.6",
-    "node-fetch": "^2.6.1",
-    "wasm-loader": "^1.3.0"
+    "node-fetch": "^3.0.0-beta.9"
   }
 }
