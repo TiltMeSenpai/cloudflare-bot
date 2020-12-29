@@ -1,7 +1,7 @@
-name = "slash-test"
+name = ""
 type = "webpack"
-account_id = "8007138c75c5bd58b814e076d44c0a82"
+account_id = ""
 workers_dev = true
-# route = "api.tilting.me"
-# zone_id = "e2692bcc98702ed94af27ae73368a1d5"
 webpack_config = "webpack.config.js"
+# Only needed for initial deploy, use `wrangler secret put` after first deploy
+# vars = {DISCORD_TOKEN="", DISCORD_APPID=""}
