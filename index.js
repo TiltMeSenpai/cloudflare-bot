@@ -1,4 +1,4 @@
-const DiscordSig = new (require("./crypto").DiscordSig)()
+const DiscordSig = require("./crypto")()
 const commands = require("./commands")
 
 addEventListener("fetch", event => {

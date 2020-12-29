@@ -1,4 +1,4 @@
-export class DiscordSig {
+class DiscordSig {
     constructor() {
         this._crypto = import("./crypto/pkg/index").then(crypto => this._crypto = crypto)
     }
@@ -12,3 +12,5 @@ export class DiscordSig {
         )
     }
 }
+
+module.exports = () => new DiscordSig()

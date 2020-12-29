@@ -4,4 +4,5 @@ account_id = ""
 workers_dev = true
 webpack_config = "webpack.config.js"
 # Only needed for initial deploy, use `wrangler secret put` after first deploy
-# vars = {DISCORD_TOKEN="", DISCORD_APPID=""}
+[env.staging]
+ vars = {DISCORD_TOKEN="", DISCORD_APPID=""}
