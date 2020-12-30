@@ -1,13 +1,13 @@
 {
     "ApplicationCommandOptionType":
        {
-            "SUB_COMMAND" : 1,
-            "SUB_COMMAND_GROUP" : 2,
-            "STRING" : 3,
-            "INTEGER" : 4,
-            "BOOLEAN" : 5,
-            "USER" : 6,
-            "CHANNEL" : 7,
-            "ROLE" : 8
+            "SubCommand" : 1,
+            "SubCommandGroup" : 2,
+            "string" : 3,
+            "number" : 4,
+            "bool" : 5,
+            "User" : 6,
+            "Channel" : 7,
+            "Role" : 8
         }
 }
