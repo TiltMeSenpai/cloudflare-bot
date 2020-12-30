@@ -8,10 +8,10 @@ async function list(appid, guild=undefined) {
     const url = (guild)?
         `https://discord.com/api/v8/applications/${appid}/guilds/${guild}/commands`:
         `https://discord.com/api/v8/applications/${appid}/commands`;
-    const res = fetch(url,
+    const res = await fetch(url,
         {
             headers: {
-                Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
+                'Authorization': `Bot ${process.env.DISCORD_TOKEN}`,
                 'Content-Type': 'application/json'
             }
         }
@@ -24,11 +24,11 @@ async function put(appid, cmd, guild=undefined){
     const url = (guild)?
         `https://discord.com/api/v8/applications/${appid}/guilds/${guild}/commands`:
         `https://discord.com/api/v8/applications/${appid}/commands`;
-    const res = fetch(url,
+    const res = await fetch(url,
         {
             method: "POST",
             headers: {
-                Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
+                'Authorization': `Bot ${process.env.DISCORD_TOKEN}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(cmd)
@@ -40,7 +40,7 @@ async function del(appid, cmd_id, guild=undefined){
     const url = (guild)?
         `https://discord.com/api/v8/applications/${appid}/guilds/${guild}/commands/${cmd_id}`:
         `https://discord.com/api/v8/applications/${appid}/commands/${cmd_id}`;
-    const res = fetch(url,
+    const res = await fetch(url,
         {
             method: "DELETE",
             headers: {
