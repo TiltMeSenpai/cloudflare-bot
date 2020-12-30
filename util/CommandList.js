@@ -33,7 +33,7 @@ async function put(appid, cmd, guild=undefined){
             },
             body: JSON.stringify(cmd)
         })
-    return await res.json();
+    return res
 }
 
 async function del(appid, cmd_id, guild=undefined){
@@ -48,7 +48,7 @@ async function del(appid, cmd_id, guild=undefined){
                 'Content-Type': 'application/json'
             }
         })
-    return await res.json();
+    return res
 }
 
 function filter_names(cmds){
