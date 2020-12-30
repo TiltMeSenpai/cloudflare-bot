@@ -92,6 +92,6 @@ function showCmd(cmds,query){
         }
     }catch(e){
         if(verbose) console.error(e);
-        else console.log('An Error happened whilst executing the command. Please try again! To see the error message, run me with log-error appended. ')
+        else console.log('An Error happened while executing the command. Please try again! To see the error message, run me with log-error appended. ')
     }
 })()
