@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "cloudflare-deploy": "wrangler publish",
+    "discord-list": "node ./util/command_manager.js list",
     "discord-push": "node ./util/command_manager.js push",
     "discord-clean": "node ./util/command_manager.js clean",
     "discord-deploy": "npm run discord-clean && npm run discord-push"
@@ -18,6 +19,7 @@
   "dependencies": {
     "@wasm-tool/wasm-pack-plugin": "^1.3.1",
     "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
     "jsdoc": "^3.6.6",
     "node-fetch": "^3.0.0-beta.9"
   }

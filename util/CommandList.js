@@ -8,14 +8,15 @@ async function list(appid, guild=undefined) {
     const url = (guild)?
         `https://discord.com/api/v8/applications/${appid}/guilds/${guild}/commands`:
         `https://discord.com/api/v8/applications/${appid}/commands`;
-    return fetch(url,
+    const res = await fetch(url,
         {
             headers: {
-                Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
+                'Authorization': `Bot ${process.env.DISCORD_TOKEN}`,
                 'Content-Type': 'application/json'
             }
         }
-    ).then(resp => resp.json())
+    )
+    return await res.json();
 
 }
 
@@ -23,29 +24,31 @@ async function put(appid, cmd, guild=undefined){
     const url = (guild)?
         `https://discord.com/api/v8/applications/${appid}/guilds/${guild}/commands`:
         `https://discord.com/api/v8/applications/${appid}/commands`;
-    return fetch(url,
+    const res = await fetch(url,
         {
             method: "POST",
             headers: {
-                Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
+                'Authorization': `Bot ${process.env.DISCORD_TOKEN}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(cmd)
         })
+    return res
 }
 
 async function del(appid, cmd_id, guild=undefined){
     const url = (guild)?
         `https://discord.com/api/v8/applications/${appid}/guilds/${guild}/commands/${cmd_id}`:
         `https://discord.com/api/v8/applications/${appid}/commands/${cmd_id}`;
-    return fetch(url,
+    const res = await fetch(url,
         {
             method: "DELETE",
             headers: {
-                Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
+                'Authorization': `Bot ${process.env.DISCORD_TOKEN}`,
                 'Content-Type': 'application/json'
             }
         })
+    return res
 }
 
 function filter_names(cmds){
@@ -98,15 +101,13 @@ async function parse(cmd_file){
                         return 3
                 }
             })(param.type.names[0])
-            if(type == 0)
-                return undefined
-            return {
+            return type ? {
                 name: param.name.split(".")[1],
                 type: type,
                 choices: param.choices,
                 required: !param.optional,
                 description: param.description
-            }
+            } : undefined
         }).filter(arg => arg) // Drop nulls
     });
     return commands

@@ -1,0 +1,13 @@
+{
+    "ApplicationCommandOptionType":
+       {
+            "SubCommand" : 1,
+            "SubCommandGroup" : 2,
+            "string" : 3,
+            "number" : 4,
+            "bool" : 5,
+            "User" : 6,
+            "Channel" : 7,
+            "Role" : 8
+        }
+}
