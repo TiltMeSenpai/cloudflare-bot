@@ -1,3 +1,4 @@
+const pubkey = Buffer.from(globalThis.DISCORD_PUBKEY || "", "hex")
 const DiscordSig = require("./crypto")()
 const commands = require("./commands")
 
@@ -6,7 +7,6 @@ addEventListener("fetch", event => {
 })
 
 async function handleRequest(request){
-    const pubkey = Buffer.from(DISCORD_PUBKEY || "", "hex")
     const timestamp = Buffer.from(request.headers.get("X-Signature-Timestamp") || "")
     const sig = Buffer.from(request.headers.get("X-Signature-Ed25519") || "", "hex")
 
