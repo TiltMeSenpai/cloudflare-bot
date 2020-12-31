@@ -1,5 +1,4 @@
-const pubkey = Buffer.from(globalThis.DISCORD_PUBKEY || "", "hex")
-const DiscordSig = require("./crypto")()
+const DiscordSig = new (require("./crypto").DiscordSig)()
 const commands = require("./commands")
 
 addEventListener("fetch", event => {
@@ -7,6 +6,7 @@ addEventListener("fetch", event => {
 })
 
 async function handleRequest(request){
+    const pubkey = Buffer.from(DISCORD_PUBKEY || "", "hex")
     const timestamp = Buffer.from(request.headers.get("X-Signature-Timestamp") || "")
     const sig = Buffer.from(request.headers.get("X-Signature-Ed25519") || "", "hex")
 
@@ -35,18 +35,29 @@ async function handlePayload(payload){
 }
 
 async function handleInteraction(payload) {
-    const args = {}
-    payload.data.options.forEach(option => {
+    const args = {};
+    (payload.data.options || []).forEach(option => {
         args[option.name] = option.value
     });
-    const resp = commands[payload.data.name](args)
-    console.log(`Payload Args: ${args}`)
-    console.log(`Payload data: ${JSON.stringify(payload.data)}`)
-    if (typeof resp == "object") {
+    console.log(`Invoke: ${payload.data.name}(${JSON.stringify(args)})`)
+    const cmd = commands[payload.data.name]
+    const resp = await (() => {
+        switch(cmd.length){
+            case 1:
+                return cmd(args)
+            case 2:
+                return cmd(args, payload.member)
+            case 3:
+                return cmd(args, payload.member, payload.channel)
+            case 4:
+                return cmd(args, payload.member, payload.channel, payload.guild)
+        }
+    })()
+    console.log(`Response: ${JSON.stringify(resp)}`)
+    if (resp.content) {
         return resp
     }
-    else
-        return {
-            content: resp
-        }
+    else{
+        return { content: resp }
+    }
 }

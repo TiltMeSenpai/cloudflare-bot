@@ -1,6 +1,11 @@
 const CommandList = require("./CommandList");
 const {computeType,validateSnowflake,resolveAll} = require("./utils.js");
 require("dotenv").config();
+let bot_config = {global: true, guilds: {}}
+try{
+    bot_config = require("../bot_config")
+}
+catch {}
 
 function beautify(x){
     return `
@@ -52,20 +57,63 @@ function showCmd(cmds,query){
                 else console.log(beautify(await CommandList.list(process.env.DISCORD_APPID)));
                 break
             case "push":
-                await resolveAll((await CommandList.parse("commands.js")).map(async (command) => {
-                    try{
-                    const cmd_status = await CommandList.put(process.env.DISCORD_APPID, command)
-                    if(cmd_status.ok){
-                        console.log(`Pushed ${command.name}`)
-                    }
-                    else{
-                        console.log(`Error whilst trying to push ${command.name}. 
-                        Reason : ${await cmd_status.json()}`)
-                    }}catch(e){
-                        if(verbose) console.error(e);
-                        console.log(`Error whilst trying to push ${command.name}.`)
-                    }
-                }));
+                let commands = {};
+                (await CommandList.parse("commands.js")).forEach(cmd => {
+                    commands[cmd.name] = cmd
+                })
+                if(bot_config.global === true){
+                    await resolveAll(commands.values().map(async (command) => {
+                        try{
+                        const cmd_status = await CommandList.put(process.env.DISCORD_APPID, command)
+                        if(cmd_status.ok){
+                            console.log(`Pushed ${command.name}`)
+                        }
+                        else{
+                            console.log(`Error whilst trying to push ${command.name}. 
+                            Reason : ${await cmd_status.json()}`)
+                        }}catch(e){
+                            if(verbose) console.error(e);
+                            console.log(`Error whilst trying to push ${command.name}.`)
+                        }
+                    }));
+                }
+                else if(Array.isArray(bot_config.global)){
+                    await resolveAll(bot_config.global.map(async (cmd) => {
+                        let command = commands[cmd]
+                        try{
+                            const cmd_status = await CommandList.put(process.env.DISCORD_APPID, command)
+                            if(cmd_status.ok){
+                                console.log(`Pushed ${command.name}`)
+                            }
+                            else{
+                                console.log(`Error whilst trying to push ${command.name}. 
+                                Reason : ${await cmd_status.json()}`)
+                            }
+                        }
+                        catch(e){
+                            if(verbose) console.error(e);
+                            console.log(`Error whilst trying to push ${command.name}.`)
+                        }
+                }))};
+                await resolveAll(Object.entries(bot_config.guilds).map(async ([guild, cmds]) => {
+                    await resolveAll(cmds.map(async (cmd) => {
+                        let command = commands[cmd]
+                        try{
+                            const cmd_status = await CommandList.put(process.env.DISCORD_APPID, command, guild)
+                            if(cmd_status.ok){
+                                console.log(`Pushed ${command.name} to ${guild}`)
+                            }
+                            else{
+                                console.log(`Error whilst trying to push ${command.name} to ${guild}. 
+                                Reason : ${await cmd_status.text()}`)
+                            }
+                        }
+                        catch(e){
+                            if(verbose) console.error(e);
+                            console.log(`Error whilst trying to push ${command.name} to ${guild}.`)
+                        }
+                    }))
+                }))
                 console.log('Done!')
                 break
             case "clean":
