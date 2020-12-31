@@ -1,4 +1,6 @@
-const DiscordSig = new (require("./crypto").DiscordSig)()
+const pubkey = Buffer.from(globalThis.DISCORD_PUBKEY || "", "hex")
+const DiscordSig = require("./crypto")()
+const { Response } = require("node-fetch")
 const commands = require("./commands")
 
 addEventListener("fetch", event => {
@@ -6,22 +8,32 @@ addEventListener("fetch", event => {
 })
 
 async function handleRequest(request){
-    const pubkey = Buffer.from(DISCORD_PUBKEY || "", "hex")
-    const timestamp = Buffer.from(request.headers.get("X-Signature-Timestamp") || "")
-    const sig = Buffer.from(request.headers.get("X-Signature-Ed25519") || "", "hex")
+    const url = new URL(request.url)
+    if(request.method == "POST" && url.pathname == "/"){
+        const timestamp = Buffer.from(request.headers.get("X-Signature-Timestamp") || "")
+        const sig = Buffer.from(request.headers.get("X-Signature-Ed25519") || "", "hex")
 
-    const body = await request.text()
-    const hashbody = Buffer.concat([timestamp, Buffer.from(body)])
-    const sig_ok = await DiscordSig.verify(pubkey, sig, hashbody)
+        const body = await request.text()
+        const hashbody = Buffer.concat([timestamp, Buffer.from(body)])
+        const sig_ok = await DiscordSig.verify(pubkey, sig, hashbody)
 
-    if(sig_ok){
-        const payload = JSON.parse(body)
-        const response = JSON.stringify(await handlePayload(payload))
-        console.log(`Command response: ${response}`)
-        return new Response(response, {headers: {"Content-Type": "application/json"}, status: 200})
+        if(sig_ok){
+            const payload = JSON.parse(body)
+            const response = JSON.stringify(await handlePayload(payload))
+            console.log(`Command response: ${response}`)
+            return new Response(response, {headers: {"Content-Type": "application/json"}, status: 200})
+        }
+        else {
+            return new Response("Signature Validation Failed", {status: 401})
+        }
     }
-    else {
-        return new Response("Signature Validation Failed", {status: 401})
+    else if(request.method == "GET"){
+        const cached = cache.match(`https://localhost${url.pathname}`)
+        if(cached)
+            return cached
+        else {
+            return new Response("Resource not found", {status: 404})
+        }
     }
 }
 
@@ -46,11 +58,7 @@ async function handleInteraction(payload) {
             case 1:
                 return cmd(args)
             case 2:
-                return cmd(args, payload.member)
-            case 3:
-                return cmd(args, payload.member, payload.channel)
-            case 4:
-                return cmd(args, payload.member, payload.channel, payload.guild)
+                return cmd(args, {user: payload.member, channel: payload.channel, guild: payload.guild, id: payload.id})
         }
     })()
     console.log(`Response: ${JSON.stringify(resp)}`)
