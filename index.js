@@ -27,14 +27,6 @@ async function handleRequest(request){
             return new Response("Signature Validation Failed", {status: 401})
         }
     }
-    else if(request.method == "GET"){
-        const cached = cache.match(`https://localhost${url.pathname}`)
-        if(cached)
-            return cached
-        else {
-            return new Response("Resource not found", {status: 404})
-        }
-    }
 }
 
 async function handlePayload(payload){
